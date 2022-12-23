@@ -40,12 +40,27 @@ const Input = (props: Props) => {
     setInput(input + e.native.toString());
   };
 
-  const onTweetClickListener = async () => {
+  const onTweetClickListener = async (s) => {
     if (loading) return;
     setLoading(true);
-    // create tweet
+    console.log(s);
 
-    const tweetId = "1";
+    // create tweet
+    const res = await fetch("/api/tweets", {
+      method: "POST",
+      body: JSON.stringify({
+        content: input,
+        image: "",
+        userId: session?.user?.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    console.log(data);
+
+    const tweetId = data.id;
     const imageRef = ref(storage, `tweets/${tweetId}/image`);
     if (selectedFile) {
       await uploadString(imageRef, selectedFile, "data_url")
@@ -53,6 +68,15 @@ const Input = (props: Props) => {
           const downloadURL = await getDownloadURL(snapshot.ref);
           console.log(downloadURL);
           // update tweet with image
+          const res = await fetch("/api/tweets", {
+            method: "PATCH",
+            body: JSON.stringify({
+              tweetId: tweetId,
+              image: downloadURL,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+          console.log(res);
         })
         .catch((error) => {
           console.log(error);
@@ -141,7 +165,7 @@ const Input = (props: Props) => {
           <button
             className="bg-green-600 rounded-full px-6 py-2 text-md font-bold hover:bg-green-700 disabled:opacity-50 disabled:bg-green-900 cursor-pointer"
             disabled={input.length === 0}
-            onClick={onTweetClickListener}
+            onClick={() => onTweetClickListener(session)}
           >
             Tweet
           </button>

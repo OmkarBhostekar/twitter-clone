@@ -35,18 +35,8 @@ model Tweet {
 
 model Hashtag {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tweets    Tweet[]
-  // tweets    HashTagsOnTweet[]
 }
-
-// model HashTagsOnTweet {
-//   tweet     Tweet   @relation(fields: [tweetId], references: [id])
-//   tweetId   Int
-//   hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
-//   hashtagId Int
-
-//   @@id([tweetId, hashtagId])
-// }
