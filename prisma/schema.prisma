@@ -15,6 +15,7 @@ model User {
   email     String   @unique
   name      String?
   avatar    String?
+  username  String   @unique
   tweets    Tweet[]  @relation("autheredBy")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,13 +30,23 @@ model Tweet {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   hashtags  Hashtag[]
+  // hashtags  HashTagsOnTweet[]
 }
 
 model Hashtag {
   id        Int      @id @default(autoincrement())
   name      String
-  tweet     Tweet    @relation(fields: [tweetId], references: [id])
-  tweetId   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  tweets    Tweet[]
+  // tweets    HashTagsOnTweet[]
 }
+
+// model HashTagsOnTweet {
+//   tweet     Tweet   @relation(fields: [tweetId], references: [id])
+//   tweetId   Int
+//   hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
+//   hashtagId Int
+
+//   @@id([tweetId, hashtagId])
+// }

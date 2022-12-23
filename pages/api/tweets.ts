@@ -3,13 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({log: ["query"]})
 
 async function getTweets() {
-    // const tweet = await prisma.tweet.create({
-    //     data: {
-    //         content: "Hello World",
-    //         authorId: 1,
-    //     },
-    // })
-
     const tweets = await prisma.tweet.findMany({
         select: {
             id: true,
@@ -19,7 +12,7 @@ async function getTweets() {
                 select: {
                     id: true,
                     name: true,
-                    email: true,
+                    // email: true,
                     avatar: true,
                 }
             },
@@ -34,10 +27,42 @@ async function getTweets() {
     return tweets;
 }
 
-const createTweet = async (req: NextApiRequest , res: NextApiResponse) => {
-    res.status(200).json({ name: 'John Doe' })
+async function getTweetsByHashtag(hashtag: string) {
+    const tweets = await prisma.tweet.findMany({
+        where: {
+            hashtags: {
+                some: {
+                    name: hashtag
+                }
+            }
+        },
+        select: {
+            id: true,
+            content: true,
+            image: true,
+            author: {
+                select: {
+                    id: true,
+                    name: true,
+                    // email: true,
+                    avatar: true,
+                }
+            },
+            hashtags: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            }
+        }
+    });
+    return tweets;
 }
 
+const createTweet = async (req: NextApiRequest , res: NextApiResponse) => {
+    const { content, image } = req.body;
+    res.status(200).json({ name: 'John Doe' })
+}
 
 export default async function handler(req: NextApiRequest , res: NextApiResponse) {
     const method = req.method
