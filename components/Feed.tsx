@@ -4,12 +4,15 @@ import React, { useState } from "react";
 import Input from "./Input";
 import { Tweet as TweeetType } from "../types/Tweet";
 import Tweet from "./Tweet";
+import { useRecoilState } from "recoil";
+import { feedState } from "../atoms/feedAtoms";
 
 type Props = {};
 
 const Feed = (props: Props) => {
   const [tweets, setTweets] = useState<TweeetType[]>([]);
   const { data: session } = useSession();
+  const [refresh, setRefresh] = useRecoilState(feedState);
 
   const fetchTweets = async () => {
     const res = await fetch(`/api/tweet?userId=${session?.user.id}}`);
@@ -21,6 +24,13 @@ const Feed = (props: Props) => {
   React.useEffect(() => {
     fetchTweets();
   }, []);
+
+  React.useEffect(() => {
+    if (refresh) {
+      fetchTweets();
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   return (
     <div className="text-white flex-grow max-w-2xl ml-0 sm:ml-[75px] border-l border-r border-gray-700 xl:ml-[370px]">

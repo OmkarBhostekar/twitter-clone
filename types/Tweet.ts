@@ -19,7 +19,7 @@ type Tweet = {
     likes: number;
     comments: number;
   };
-  comment: [Comment];
+  comments: [Comment];
   createdAt: String;
 };
 

@@ -12,6 +12,7 @@ type Comment = {
   _count: {
     likes: number;
   };
+  createdAt: String;
 };
 
 export { Comment };

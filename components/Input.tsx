@@ -12,6 +12,8 @@ import Picker from "@emoji-mart/react";
 import { getDownloadURL, ref, uploadString } from "@firebase/storage";
 import { storage } from "../firebase";
 import { useSession } from "next-auth/react";
+import { useRecoilState } from "recoil";
+import { feedState } from "../atoms/feedAtoms";
 
 type Props = {};
 
@@ -21,6 +23,7 @@ const Input = (props: Props) => {
   const filePickerRef = useRef(null);
   const [showEmojis, setShowEmojis] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [refresh, setRefresh] = useRecoilState(feedState);
 
   const addImageToPost = (e: any) => {
     console.log(e);
@@ -68,7 +71,7 @@ const Input = (props: Props) => {
           const downloadURL = await getDownloadURL(snapshot.ref);
           console.log(downloadURL);
           // update tweet with image
-          const res = await fetch("/api/tweets", {
+          const res = await fetch("/api/tweet", {
             method: "PATCH",
             body: JSON.stringify({
               tweetId: tweetId,
@@ -83,6 +86,7 @@ const Input = (props: Props) => {
         });
     } else console.log("no image");
 
+    setRefresh(true);
     setLoading(false);
     setInput("");
     setSelectedFile(null);

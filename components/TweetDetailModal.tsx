@@ -14,10 +14,7 @@ import { useRouter } from "next/router";
 import Moment from "react-moment";
 import { modalState, tweetIdState } from "../atoms/modelAtoms";
 import { Tweet } from "../types/Tweet";
-
-type Props = {
-  tweet: Tweet;
-};
+import { feedState } from "../atoms/feedAtoms";
 
 function TweetDetailModal() {
   const { data: session } = useSession();
@@ -25,17 +22,37 @@ function TweetDetailModal() {
   const tweet = useRecoilValue(tweetIdState);
   const [comment, setComment] = useState("");
   const router = useRouter();
+  const [refresh, setRefresh] = useRecoilState(feedState);
 
   const sendComment = async (e: any) => {
     e.preventDefault();
 
     // add comment api
+    const res = await fetch("/api/tweet/comment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tweetId: tweet.id,
+        content: comment,
+        userId: session?.user.id,
+      }),
+    });
 
     setIsOpen(false);
     setComment("");
+    setRefresh(true);
 
-    router.push(`/${tweet.id}`);
+    router.push(`/tweet/${tweet.id}`);
   };
+
+  const text = tweet.content?.split(" ");
+  const hashTaggedText = text?.map((word) => {
+    if (word.startsWith("#")) {
+      return <span className="text-green-500 hover:underline">{word} </span>;
+    } else return word + " ";
+  });
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -63,7 +80,7 @@ function TweetDetailModal() {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-black rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
-              <div className="flex items-center px-1.5 py-2 border-b border-gray-700">
+              <div className="flex justify-end items-center px-1.5 py-2 border-b border-gray-700">
                 <div
                   className="hoverAnimation w-9 h-9 flex items-center justify-center xl:px-0"
                   onClick={() => setIsOpen(false)}
@@ -94,8 +111,15 @@ function TweetDetailModal() {
                         <Moment fromNow>{new Date(tweet?.createdAt)}</Moment>
                       </span>
                       <p className="text-[#d9d9d9] text-[15px] sm:text-base">
-                        {tweet?.content}
+                        {hashTaggedText}
                       </p>
+                      {tweet?.image && (
+                        <img
+                          src={tweet?.image}
+                          alt=""
+                          className="w-32 mt-3 rounded-2xl"
+                        />
+                      )}
                     </div>
                   </div>
 

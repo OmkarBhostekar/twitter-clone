@@ -67,7 +67,7 @@ const Tweet = (props: Props) => {
   return (
     <div
       className="p-3 flex cursor-pointer border-b border-gray-700"
-      // onClick={() => router.push(`/${props.id}`)}
+      onClick={() => router.push(`/tweet/${props.id}`)}
     >
       {!props.tweetDetailPage && (
         <img

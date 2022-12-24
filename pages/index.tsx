@@ -14,23 +14,12 @@ import { Session } from "next-auth";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atoms/modelAtoms";
 import TweetDetailModal from "../components/TweetDetailModal";
-
-interface Trending {
-  heading: string | null;
-  description: string | null;
-  img: string | null;
-  tags: string[] | null;
-}
-
-interface Follow {
-  tag: string | null;
-  username: string | null;
-  userImg: string | null;
-}
+import { Follow, Trending } from "../types/others";
+import Widgets from "../components/Widgets";
 
 interface Props {
-  trendingResults: any;
-  followResults: any;
+  trendingResults: [Trending];
+  followResults: [Follow];
   providers: Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
@@ -54,7 +43,10 @@ export default function Home(props: Props) {
         <Sidebar />
         <Feed />
 
-        {/* <Widgets /> */}
+        <Widgets
+          trendingResults={props.trendingResults}
+          followResults={props.followResults}
+        />
 
         {isOpen && <TweetDetailModal />}
       </main>
