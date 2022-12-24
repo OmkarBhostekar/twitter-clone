@@ -40,16 +40,24 @@ const Sidebar = (props: Props) => {
       </button>
       <div
         className="flex items-center justify-center hoverAnimation xl:mx-auto xl:-mr-5 mt-auto"
+        // @ts-ignore
         onClick={signOut}
       >
         <img
+          // @ts-ignore
           src={session?.user?.image}
           alt=""
           className="h-10 w-10 rounded-full xl:mr-2.5"
         />
         <div className="hidden xl:inline leading-5">
           <h4 className="text-[#d9d9d9] text-bold">{session?.user?.name}</h4>
-          <p className="text-[#6e767d]">@{session?.user?.tag}</p>
+          <p className="text-[#6e767d]">
+            @
+            {
+              // @ts-ignore
+              session?.user?.tag
+            }
+          </p>
         </div>
         <EllipsisHorizontalIcon className="h-6 hidden xl:inline ml-4 text-[#d9d9d9]" />
       </div>

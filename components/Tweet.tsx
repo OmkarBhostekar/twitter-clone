@@ -24,6 +24,7 @@ import { Tweet } from "../types/Tweet";
 type Props = {
   id: number;
   tweet: Tweet;
+  key: number;
   tweetDetailPage: boolean;
 };
 
@@ -39,7 +40,11 @@ const Tweet = (props: Props) => {
   const text = props.tweet.content?.split(" ");
   const hashTaggedText = text?.map((word) => {
     if (word.startsWith("#")) {
-      return <span className="text-green-500 hover:underline">{word} </span>;
+      return (
+        <span className="text-green-500 hover:underline" key={word}>
+          {word}{" "}
+        </span>
+      );
     } else return word + " ";
   });
 
@@ -58,6 +63,7 @@ const Tweet = (props: Props) => {
       },
       body: JSON.stringify({
         tweetId: props.tweet.id,
+        // @ts-ignore
         userId: session.user.id,
       }),
     });
@@ -104,7 +110,9 @@ const Tweet = (props: Props) => {
             </div>
             {"  "}·{" "}
             <span className="hover:underline text-sm sm:text-[15px]">
-              <Moment fromNow>{new Date(props.tweet?.createdAt)}</Moment>
+              <Moment fromNow>
+                {new Date(props.tweet?.createdAt as string)}
+              </Moment>
             </span>
             {!props.tweetDetailPage && (
               <p className="text-[#d9d9d9] text-lg sm:text-base mt-0.5">
@@ -147,26 +155,29 @@ const Tweet = (props: Props) => {
             )}
           </div>
 
-          {session.user.id === props.tweet.author.id ? (
-            <div
-              className="flex items-center space-x-1 group"
-              onClick={(e) => {
-                e.stopPropagation();
-                // deleteDoc(doc(db, "posts", id));
-                // router.push("/");
-              }}
-            >
-              <div className="icon group-hover:bg-red-600/10">
-                <TrashIcon className="h-5 group-hover:text-red-600" />
+          {
+            // @ts-ignore
+            session?.user?.id === props.tweet.author.id ? (
+              <div
+                className="flex items-center space-x-1 group"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // deleteDoc(doc(db, "posts", id));
+                  // router.push("/");
+                }}
+              >
+                <div className="icon group-hover:bg-red-600/10">
+                  <TrashIcon className="h-5 group-hover:text-red-600" />
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="flex items-center space-x-1 group">
-              <div className="icon group-hover:bg-green-500/10">
-                <ArrowPathRoundedSquareIcon className="h-5 group-hover:text-green-500" />
+            ) : (
+              <div className="flex items-center space-x-1 group">
+                <div className="icon group-hover:bg-green-500/10">
+                  <ArrowPathRoundedSquareIcon className="h-5 group-hover:text-green-500" />
+                </div>
               </div>
-            </div>
-          )}
+            )
+          }
 
           <div
             className="flex items-center space-x-1 group"

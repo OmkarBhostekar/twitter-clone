@@ -15,6 +15,7 @@ const likeUnlikePost = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     },
   });
+  // @ts-ignore
   if (isLiked.likes.length === 0) {
     await prisma.tweet.update({
       where: { id: tweetId },

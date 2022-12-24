@@ -23,4 +23,5 @@ type Tweet = {
   createdAt: String;
 };
 
+// @ts-ignore
 export { Tweet };

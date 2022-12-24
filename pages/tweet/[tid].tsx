@@ -43,6 +43,7 @@ function PostPage(props: Props) {
 
   const fetchTweet = async () => {
     if (tid) {
+      // @ts-ignore
       fetch(`/api/tweet/${tid}?userId=${session?.user.id}`)
         .then((res) => res.json())
         .then((data) => setTweet(data));
@@ -68,7 +69,7 @@ function PostPage(props: Props) {
     <div>
       <Head>
         <title>
-          {tweet?.author.name} on Twitter: "{tweet?.content}"
+          {tweet?.author.name} on Twitter: {tweet?.content}
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -84,11 +85,19 @@ function PostPage(props: Props) {
             </div>
             Tweet
           </div>
-          {tweet && <Tweet id={tweet?.id} tweet={tweet} tweetDetailPage />}
+          {tweet && (
+            <Tweet
+              id={tweet?.id}
+              tweet={tweet}
+              key={tweet?.id}
+              tweetDetailPage
+            />
+          )}
 
-          {tweet?.comments?.length > 0 && (
+          {tweet?.comments && tweet?.comments?.length > 0 && (
             <div className="pb-72">
               {tweet?.comments.map((comment) => (
+                // @ts-ignore
                 <Comment key={comment.id} id={comment.id} comment={comment} />
               ))}
             </div>

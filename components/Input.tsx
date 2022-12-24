@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useRef, useState } from "react";
 import data from "@emoji-mart/data";
+// @ts-ignore
 import Picker from "@emoji-mart/react";
 import { getDownloadURL, ref, uploadString } from "@firebase/storage";
 import { storage } from "../firebase";
@@ -35,6 +36,7 @@ const Input = (props: Props) => {
     }
 
     reader.onload = (readerEvent) => {
+      // @ts-ignore
       setSelectedFile(readerEvent.target.result);
     };
   };
@@ -43,7 +45,7 @@ const Input = (props: Props) => {
     setInput(input + e.native.toString());
   };
 
-  const onTweetClickListener = async (s) => {
+  const onTweetClickListener = async (s: any) => {
     if (loading) return;
     setLoading(true);
     console.log(s);
@@ -54,6 +56,7 @@ const Input = (props: Props) => {
       body: JSON.stringify({
         content: input,
         image: "",
+        // @ts-ignore
         userId: session?.user?.id,
       }),
       headers: {
@@ -100,6 +103,7 @@ const Input = (props: Props) => {
       className={`border-b border-gray-700 p-3 flex gap-x-3 overflow-y-auto sm:scrollbar-hide xl:scrollbar-hide`}
     >
       <img
+        // @ts-ignore
         src={session?.user?.image}
         alt=""
         className="h-10 w-10 rounded-full xl:mr-2.5"
@@ -135,8 +139,10 @@ const Input = (props: Props) => {
             <div
               className="icon"
               onClick={() => {
-                if (filePickerRef.current !== null)
+                if (filePickerRef.current !== null) {
+                  // @ts-ignore
                   filePickerRef!.current!.click();
+                }
               }}
             >
               <PhotoIcon className="h-[22px] text-green-600" />

@@ -1,5 +1,4 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { Trending as TrendingType } from "../types/others";
 
@@ -18,11 +17,12 @@ function Trending(props: Props) {
         </h6>
         <p className="text-[#6e767d] text-xs font-medium max-w-[250px]">
           Trending with{" "}
-          {result.tags.map((tag, index) => (
-            <span className="tag" key={index}>
-              {tag}
-            </span>
-          ))}
+          {result.tags &&
+            result.tags.map((tag, index) => (
+              <span className="tag" key={index}>
+                {tag}
+              </span>
+            ))}
         </p>
       </div>
 
@@ -31,6 +31,7 @@ function Trending(props: Props) {
           src={result.img}
           width={70}
           height={70}
+          alt="Trending"
           objectFit="cover"
           className="rounded-2xl"
         />

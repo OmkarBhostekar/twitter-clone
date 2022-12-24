@@ -143,8 +143,8 @@ const updateTweet = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
   const data = {
-    content: oldTweet.content,
-    image: oldTweet.image,
+    content: oldTweet && oldTweet.content,
+    image: oldTweet && oldTweet.image,
   };
   if (content) {
     data.content = content;
@@ -156,6 +156,7 @@ const updateTweet = async (req: NextApiRequest, res: NextApiResponse) => {
     where: {
       id: tweetId,
     },
+    // @ts-ignore
     data: data,
   });
   res.status(200).json(tweet);

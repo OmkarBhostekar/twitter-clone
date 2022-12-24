@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
@@ -16,7 +18,7 @@ import { modalState, tweetIdState } from "../atoms/modelAtoms";
 import { Tweet } from "../types/Tweet";
 import { feedState } from "../atoms/feedAtoms";
 
-function TweetDetailModal() {
+function TweetDetailModal(props: any) {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const tweet = useRecoilValue(tweetIdState);
@@ -47,10 +49,15 @@ function TweetDetailModal() {
     router.push(`/tweet/${tweet.id}`);
   };
 
+  // @ts-ignore
   const text = tweet.content?.split(" ");
-  const hashTaggedText = text?.map((word) => {
+  const hashTaggedText = text?.map((word: any) => {
     if (word.startsWith("#")) {
-      return <span className="text-green-500 hover:underline">{word} </span>;
+      return (
+        <span className="text-green-500 hover:underline" key={word}>
+          {word}{" "}
+        </span>
+      );
     } else return word + " ";
   });
 

@@ -12,7 +12,8 @@ type Comment = {
   _count: {
     likes: number;
   };
-  createdAt: String;
+  createdAt: string;
 };
 
+// @ts-ignore
 export { Comment };

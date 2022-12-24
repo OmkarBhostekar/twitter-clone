@@ -15,7 +15,8 @@ const Feed = (props: Props) => {
   const [refresh, setRefresh] = useRecoilState(feedState);
 
   const fetchTweets = async () => {
-    const res = await fetch(`/api/tweet?userId=${session?.user.id}}`);
+    // @ts-ignore
+    const res = await fetch(`/api/tweet?userId=${session?.user?.id ?? ""}}`);
     const newTweets = await res.json();
     setTweets(newTweets);
     console.log("newTweets", newTweets);
@@ -43,7 +44,12 @@ const Feed = (props: Props) => {
       <Input />
       <div className="pb-72">
         {tweets.map((tweet: Tweet) => (
-          <Tweet key={tweet.id} id={tweet.id} tweet={tweet} />
+          <Tweet
+            key={tweet.id}
+            id={tweet.id}
+            tweet={tweet}
+            tweetDetailPage={false}
+          />
         ))}
       </div>
     </div>
