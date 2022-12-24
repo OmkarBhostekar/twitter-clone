@@ -11,14 +11,30 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  avatar    String?
-  username  String   @unique
-  tweets    Tweet[]  @relation("autheredBy")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String?
+  avatar       String?
+  cover        String?
+  bio          String?
+  username     String    @unique
+  followedBy   Follows[] @relation("following")
+  following    Follows[] @relation("follower")
+  tweets       Tweet[]   @relation("autheredBy")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Comments     Comment[] @relation("authoredBy")
+  likes        Tweet[]   @relation("tweetsLikedBy")
+  commentlikes Comment[] @relation("commentsLikedBy")
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 }
 
 model Tweet {
@@ -27,10 +43,24 @@ model Tweet {
   image     String?
   author    User      @relation("autheredBy", fields: [authorId], references: [id])
   authorId  Int
+  hashtags  Hashtag[]
+  comments  Comment[]
+  likes     User[]    @relation("tweetsLikedBy")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  hashtags  Hashtag[]
-  // hashtags  HashTagsOnTweet[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  image     String?
+  tweet     Tweet    @relation(fields: [tweetId], references: [id])
+  tweetId   Int
+  author    User     @relation("authoredBy", fields: [authorId], references: [id])
+  authorId  Int
+  likes     User[]   @relation("commentsLikedBy")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Hashtag {

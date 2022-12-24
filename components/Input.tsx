@@ -46,7 +46,7 @@ const Input = (props: Props) => {
     console.log(s);
 
     // create tweet
-    const res = await fetch("/api/tweets", {
+    const res = await fetch("/api/tweet", {
       method: "POST",
       body: JSON.stringify({
         content: input,

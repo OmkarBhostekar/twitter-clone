@@ -11,6 +11,9 @@ import {
 } from "next-auth/react";
 import { BuiltInProviderType } from "next-auth/providers";
 import { Session } from "next-auth";
+import { useRecoilState } from "recoil";
+import { modalState } from "../atoms/modelAtoms";
+import TweetDetailModal from "../components/TweetDetailModal";
 
 interface Trending {
   heading: string | null;
@@ -37,6 +40,7 @@ interface Props {
 
 export default function Home(props: Props) {
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
 
   if (!session) return <Login providers={props.providers} />;
 
@@ -52,7 +56,7 @@ export default function Home(props: Props) {
 
         {/* <Widgets /> */}
 
-        {/* <Modal /> */}
+        {isOpen && <TweetDetailModal />}
       </main>
     </div>
   );
