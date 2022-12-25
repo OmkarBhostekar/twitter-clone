@@ -48,6 +48,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
     async signIn({ user, profile }) {
       // check if user exists in database
