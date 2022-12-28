@@ -20,6 +20,7 @@ const getTweetDetail = async (
           name: true,
           username: true,
           avatar: true,
+          verified: true,
         },
       },
       hashtags: {

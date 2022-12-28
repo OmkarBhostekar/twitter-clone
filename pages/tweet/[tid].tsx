@@ -21,10 +21,9 @@ import Comment from "../../components/Comment";
 import { feedState } from "../../atoms/feedAtoms";
 import { Follow, Trending } from "../../types/others";
 import Widgets from "../../components/Widgets";
+import { trendingState } from "../../atoms/widgetsAtoms";
 
 interface Props {
-  trendingResults: [Trending];
-  followResults: [Follow];
   providers: Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
@@ -103,10 +102,7 @@ function PostPage(props: Props) {
             </div>
           )}
         </div>
-        <Widgets
-          trendingResults={props.trendingResults}
-          followResults={props.followResults}
-        />
+        <Widgets />
 
         {isOpen && <TweetDetailModal />}
       </main>
@@ -117,19 +113,11 @@ function PostPage(props: Props) {
 export default PostPage;
 
 export async function getServerSideProps(context: any) {
-  const trendingResults = await fetch("https://www.jsonkeeper.com/b/NKEV").then(
-    (res) => res.json()
-  );
-  const followResults = await fetch("https://www.jsonkeeper.com/b/WWMJ").then(
-    (res) => res.json()
-  );
   const providers = await getProviders();
   const session = await getSession(context);
 
   return {
     props: {
-      trendingResults,
-      followResults,
       providers,
       session,
     },

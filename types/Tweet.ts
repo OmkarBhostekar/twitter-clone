@@ -7,6 +7,7 @@ type Tweet = {
     name: string;
     username: string;
     avatar: string;
+    verified: boolean;
   };
   hashtags: [
     {

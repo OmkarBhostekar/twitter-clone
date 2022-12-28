@@ -16,6 +16,8 @@ import { modalState } from "../atoms/modelAtoms";
 import TweetDetailModal from "../components/TweetDetailModal";
 import { Follow, Trending } from "../types/others";
 import Widgets from "../components/Widgets";
+import { trendingState, followState } from "../atoms/widgetsAtoms";
+import { useEffect } from "react";
 
 interface Props {
   trendingResults: [Trending];
@@ -30,6 +32,13 @@ interface Props {
 export default function Home(props: Props) {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [trending, setTrending] = useRecoilState(trendingState);
+  const [follow, setFollow] = useRecoilState(followState);
+
+  useEffect(() => {
+    setTrending(props.trendingResults);
+    setFollow(props.followResults);
+  }, []);
 
   if (!session) return <Login providers={props.providers} />;
 

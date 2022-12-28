@@ -26,6 +26,7 @@ model User {
   Comments     Comment[] @relation("authoredBy")
   likes        Tweet[]   @relation("tweetsLikedBy")
   commentlikes Comment[] @relation("commentsLikedBy")
+  verified     Boolean   @default(false)
 }
 
 model Follows {

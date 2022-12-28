@@ -97,6 +97,10 @@ const Tweet = (props: Props) => {
                 className={`font-bold text-lg sm:text-base text-[#d9d9d9] group-hover:underline ${
                   !props.tweetDetailPage && "inline-block"
                 }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/user/${props.tweet.author.id}`);
+                }}
               >
                 {props.tweet.author.name}
               </h4>

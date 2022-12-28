@@ -15,6 +15,53 @@ const getTweets = async (req: NextApiRequest, res: NextApiResponse) => {
           name: true,
           username: true,
           avatar: true,
+          verified: true,
+        },
+      },
+      hashtags: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      createdAt: true,
+      likes: {
+        select: {
+          id: true,
+        },
+        where: {
+          id: userId,
+        },
+      },
+      _count: {
+        select: { likes: true, comments: true },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  res.status(200).json(tweets);
+};
+
+const getUserTweets = async (req: NextApiRequest, res: NextApiResponse) => {
+  const userId = parseInt(req.query.userId as string);
+  const uid = parseInt(req.query.uid as string);
+  const tweets = await prisma.tweet.findMany({
+    where: {
+      authorId: uid,
+    },
+    select: {
+      id: true,
+      content: true,
+      image: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          avatar: true,
+          verified: true,
         },
       },
       hashtags: {
@@ -62,6 +109,7 @@ async function getTweetsByHashtag(hashtag: string) {
           name: true,
           // email: true,
           avatar: true,
+          verified: true,
         },
       },
       hashtags: {
@@ -169,7 +217,11 @@ export default async function handler(
   const method = req.method;
   switch (method) {
     case "GET":
-      getTweets(req, res);
+      if (req.query.uid !== undefined) {
+        getUserTweets(req, res);
+      } else {
+        getTweets(req, res);
+      }
       break;
     case "POST":
       createTweet(req, res);
