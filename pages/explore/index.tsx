@@ -68,6 +68,7 @@ const Explore = (props: Props) => {
             tags.map((tag) => (
               // @ts-ignore
               <div
+                key={tag.id}
                 className="flex flex-row justify-between py-3 px-6 cursor-pointer transition duration-200 ease-out hover:bg-[#d9d9d9] hover:bg-opacity-5"
                 onClick={() => router.push(`/explore/${tag.name}`)}
               >

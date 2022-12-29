@@ -23,6 +23,7 @@ const ProfileInfo = (props: Props) => {
       <div className="flex flex-col">
         <div className="flex items-center justify-center h-48">
           <img
+            // @ts-ignore
             src={props.user.cover}
             className="h-48 w-full object-cover bg-[#323638] "
           />
@@ -30,6 +31,7 @@ const ProfileInfo = (props: Props) => {
         <div className="-mt-16 flex flex-col mx-4">
           <div className="flex flex-row items-end justify-between">
             <img
+              // @ts-ignore
               src={props.user.avatar}
               alt="profile image"
               className="h-36 w-36 rounded-full border-4 border-black"

@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   id: number;
   name: string | null;
   username: string | null;
@@ -13,4 +13,3 @@ type User = {
   verified: boolean;
   isFollowed: boolean;
 };
-export { User };

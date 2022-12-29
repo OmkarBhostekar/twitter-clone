@@ -68,7 +68,11 @@ const HashTag = (props: Props) => {
             <Tweet key={tweet.id} tweet={tweet} tweetDetailPage={false} />
           ))}
         </div>
-        <Widgets />
+        <Widgets
+          followVisible={true}
+          searchVisible={true}
+          trendingVsible={true}
+        />
 
         {isOpen && <TweetDetailModal />}
       </main>
