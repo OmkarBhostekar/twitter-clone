@@ -29,16 +29,9 @@ interface Props {
   // session: Session | null;
 }
 
-export default function Home(props: Props) {
+const Home = (props: Props) => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useRecoilState(modalState);
-  const [trending, setTrending] = useRecoilState(trendingState);
-  const [follow, setFollow] = useRecoilState(followState);
-
-  useEffect(() => {
-    setTrending(props.trendingResults);
-    setFollow(props.followResults);
-  }, []);
 
   if (!session) return <Login providers={props.providers} />;
 
@@ -53,33 +46,25 @@ export default function Home(props: Props) {
         <Feed />
 
         <Widgets
-          trendingResults={props.trendingResults}
-          followResults={props.followResults}
+          searchVisible={true}
+          trendingVsible={true}
+          followVisible={true}
         />
 
         {isOpen && <TweetDetailModal />}
       </main>
     </div>
   );
-}
+};
+
+export default Home;
 
 export async function getServerSideProps(context: any) {
-  const trendingResults = await fetch("https://www.jsonkeeper.com/b/NKEV").then(
-    (res) => res.json()
-  );
-  const followResults = await fetch("https://www.jsonkeeper.com/b/WWMJ").then(
-    (res) => res.json()
-  );
-  console.log("trendingResults", trendingResults);
-  console.log("followResults", followResults);
-
   const providers = await getProviders();
   const session = await getSession(context);
 
   return {
     props: {
-      trendingResults,
-      followResults,
       providers,
       session,
     },

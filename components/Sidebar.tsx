@@ -15,25 +15,39 @@ import {
   EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
   const { data: session } = useSession();
+  const router = useRouter();
   return (
     <div className="hidden sm:flex flex-col items-center xl:items-start xl:width-[340px] fixed p-2 h-full">
       <div className="flex items-center justify-center w-14 h-14 hoverAnimation p-0 xl:ml-24">
         <Image src="/icons/twitter.svg" width={30} height={30} alt="" />
       </div>
       <div className="space-y-2.5 mt-4 mb-2.5 xl:ml-24">
-        <SidebarItem title="Home" Icon={HomeIcon} />
-        <SidebarItem title="Explore" Icon={HashtagIcon} />
-        <SidebarItem title="Notifications" Icon={BellIcon} />
-        <SidebarItem title="Messages" Icon={InboxIcon} />
-        <SidebarItem title="Bookmarks" Icon={BookmarkIcon} />
-        <SidebarItem title="Lists" Icon={ClipboardIcon} />
-        <SidebarItem title="Profile" Icon={UserIcon} />
-        <SidebarItem title="More" Icon={EllipsisHorizontalCircleIcon} />
+        <SidebarItem
+          onClick={() => router.push("/")}
+          title="Home"
+          Icon={HomeIcon}
+        />
+        <SidebarItem
+          onClick={() => router.push("/explore")}
+          title="Explore"
+          Icon={HashtagIcon}
+        />
+        <SidebarItem onClick={() => {}} title="Notifications" Icon={BellIcon} />
+        <SidebarItem onClick={() => {}} title="Messages" Icon={InboxIcon} />
+        <SidebarItem onClick={() => {}} title="Bookmarks" Icon={BookmarkIcon} />
+        <SidebarItem onClick={() => {}} title="Lists" Icon={ClipboardIcon} />
+        <SidebarItem onClick={() => {}} title="Profile" Icon={UserIcon} />
+        <SidebarItem
+          onClick={() => {}}
+          title="More"
+          Icon={EllipsisHorizontalCircleIcon}
+        />
       </div>
       <button className=" hidden xl:inline ml-auto bg-green-600 text-white rounded-full w-44 h-[52px] text-lg font-bold shadow-md hover:bg-green-700">
         Tweet

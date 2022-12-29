@@ -6,12 +6,15 @@ import {
 import React, { useState } from "react";
 import { User } from "../types/User";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 type Props = {
   user: User;
+  onFollow: (follow: boolean) => void;
 };
 
 const ProfileInfo = (props: Props) => {
+  const { data: session } = useSession();
   const [isFollowing, setIsFollowing] = useState<Boolean>(
     props.user.isFollowed
   );
@@ -21,8 +24,7 @@ const ProfileInfo = (props: Props) => {
         <div className="flex items-center justify-center h-48">
           <img
             src={props.user.cover}
-            alt="cover"
-            className="h-48 w-full object-cover bg-[#323638] border-0"
+            className="h-48 w-full object-cover bg-[#323638] "
           />
         </div>
         <div className="-mt-16 flex flex-col mx-4">
@@ -36,16 +38,31 @@ const ProfileInfo = (props: Props) => {
               <div className="h-10 w-10 border-[.5px] bg-black border-white rounded-full mr-3">
                 <EllipsisHorizontalIcon className="h-6 text-white mx-auto mt-2" />
               </div>
-
-              <button
-                className={
-                  isFollowing
-                    ? ` bg-black text-white border-[.5px] border-white rounded-full font-bold text-sm py-2 px-4`
-                    : ` bg-white text-black rounded-full font-bold text-sm py-2 px-4`
-                }
-              >
-                {isFollowing ? "Following" : "Follow"}
-              </button>
+              {
+                // @ts-ignore
+                session.user.id === props.user.id ? (
+                  <button
+                    className="bg-black text-white border-[.5px] border-white rounded-full font-bold text-sm py-2 px-4"
+                    onClick={() => {}}
+                  >
+                    Edit Profile
+                  </button>
+                ) : (
+                  <button
+                    className={
+                      isFollowing
+                        ? ` bg-black text-white border-[.5px] border-white rounded-full font-bold text-sm py-2 px-4`
+                        : ` bg-white text-black rounded-full font-bold text-sm py-2 px-4`
+                    }
+                    onClick={() => {
+                      setIsFollowing(!isFollowing);
+                      props.onFollow(!isFollowing);
+                    }}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </button>
+                )
+              }
             </div>
           </div>
           <div className="flex flex-row items-center mt-4">
@@ -72,14 +89,22 @@ const ProfileInfo = (props: Props) => {
             <div className="text-gray-500 mt-2 ml-1">Joined December 2022</div>
           </div>
           <div className="flex flex-row mt-2">
-            <div className="text-white text-bold">
-              {props.user._count.following}
+            <div className="cursor-pointer flex flex-row">
+              <div className="text-white text-bold ">
+                {props.user._count.following}
+              </div>
+              <div className="text-gray-500 ml-1 mr-2 hover:underline">
+                Following
+              </div>
             </div>
-            <div className="text-gray-500 ml-1 mr-2">Following</div>
-            <div className="text-white text-bold">
-              {props.user._count.followedBy}
+            <div className="flex flex-row cursor-pointer ">
+              <div className="text-white text-bold">
+                {props.user._count.followedBy}
+              </div>
+              <div className="text-gray-500 ml-1 mr-2 hover:underline">
+                Followers
+              </div>
             </div>
-            <div className="text-gray-500 ml-1 mr-2">Followers</div>
           </div>
         </div>
       </div>

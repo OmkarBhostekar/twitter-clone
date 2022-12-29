@@ -5,6 +5,7 @@ type Props = {
   title: String;
   Icon: any;
   active?: Boolean;
+  onClick?: () => void;
 };
 
 const SidebarItem = (props: Props) => {
@@ -13,6 +14,7 @@ const SidebarItem = (props: Props) => {
       className={`text-[#d9d9d9] flex items-center justify-center xl:justify-start text-xl space-x-3 hoverAnimation ${
         props.active && "font-bold"
       }`}
+      onClick={props.onClick}
     >
       <props.Icon className="h-7 text-[#d9d9d9]" />
       <span className="hidden xl:inline text-[#d9d9d9]">{props.title}</span>

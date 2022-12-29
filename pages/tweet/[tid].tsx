@@ -102,7 +102,11 @@ function PostPage(props: Props) {
             </div>
           )}
         </div>
-        <Widgets />
+        <Widgets
+          searchVisible={true}
+          trendingVsible={true}
+          followVisible={true}
+        />
 
         {isOpen && <TweetDetailModal />}
       </main>

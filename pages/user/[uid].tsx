@@ -61,6 +61,22 @@ const Profile = (props: Props) => {
     fetchUserTweets();
   }, []);
 
+  const onFollowClickListener = async (isFollow: boolean) => {
+    if (!user) return;
+    const res = await fetch(`/api/user/${user.id}/follow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // @ts-ignore
+        userId: session?.user.id,
+        isFollow: isFollow,
+      }),
+    }).then((res) => res.json());
+    await fetchUser();
+  };
+
   return (
     <div className="">
       <main className="bg-black min-h-screen flex max-w-[1500px] mx-auto">
@@ -80,7 +96,7 @@ const Profile = (props: Props) => {
               </span>
             </div>
           </div>
-          {user && <ProfileInfo user={user} />}
+          {user && <ProfileInfo user={user} onFollow={onFollowClickListener} />}
           <div className="flex flex-row border-b border-gray-700">
             <div className="flex flex-col w-1/4 items-center justify-center hover:bg-opacity-10 cursor-pointer transition duration-200 ease-out hover:bg-[#d9d9d9] pt-3">
               <div className="text-white">Tweets</div>
@@ -89,10 +105,15 @@ const Profile = (props: Props) => {
           </div>
 
           {userTweets.map((tweet) => (
+            // @ts-ignore
             <Tweet key={tweet.id} tweet={tweet} tweetDetailPage={false} />
           ))}
         </div>
-        <Widgets />
+        <Widgets
+          searchVisible={true}
+          trendingVsible={true}
+          followVisible={true}
+        />
 
         {isOpen && <TweetDetailModal />}
       </main>
