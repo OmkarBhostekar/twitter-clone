@@ -41,7 +41,14 @@ const Tweet = (props: Props) => {
   const hashTaggedText = text?.map((word) => {
     if (word.startsWith("#")) {
       return (
-        <span className="text-green-500 hover:underline" key={word}>
+        <span
+          className="text-green-500 hover:underline"
+          key={word}
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/explore/${word.slice(1)}`);
+          }}
+        >
           {word}{" "}
         </span>
       );
