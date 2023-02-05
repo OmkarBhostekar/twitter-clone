@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({ log: ["query"] });
 
 async function getTweetsByHashtag(req: NextApiRequest, res: NextApiResponse) {
-  const userId = parseInt(req.query.userId as string);
+  const userId = req.query.userId as string;
   const hashtag = req.query.hashtag as string;
   const tweets = await prisma.tweet.findMany({
     where: {

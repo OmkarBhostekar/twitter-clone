@@ -3,11 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({ log: ["query"] });
 
 const getTweetDetail = async (
-  tid: number,
+  tid: string,
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const userId = parseInt(req.query.userId as string);
+  const userId = req.query.userId as string;
   const tweet = await prisma.tweet.findUnique({
     where: { id: tid },
     select: {
@@ -78,7 +78,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { tid } = req.query;
-  const tweetId = parseInt(tid as string);
+  const tweetId = tid as string;
   const method = req.method;
   switch (method) {
     case "GET":

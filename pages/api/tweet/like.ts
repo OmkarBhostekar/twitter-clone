@@ -4,8 +4,8 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 const likeUnlikePost = async (req: NextApiRequest, res: NextApiResponse) => {
   let { tweetId, userId } = req.body;
-  tweetId = parseInt(tweetId);
-  userId = parseInt(userId);
+  tweetId = tweetId as string;
+  userId = userId as string;
   const isLiked = await prisma.tweet.findUnique({
     where: { id: tweetId },
     select: {

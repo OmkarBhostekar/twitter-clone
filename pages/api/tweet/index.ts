@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({ log: ["query"] });
 
 const getTweets = async (req: NextApiRequest, res: NextApiResponse) => {
-  const userId = parseInt(req.query.userId as string);
+  const userId = req.query.userId as string;
   const tweets = await prisma.tweet.findMany({
     select: {
       id: true,
@@ -45,8 +45,8 @@ const getTweets = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const getUserTweets = async (req: NextApiRequest, res: NextApiResponse) => {
-  const userId = parseInt(req.query.userId as string);
-  const uid = parseInt(req.query.uid as string);
+  const userId = req.query.userId as string;
+  const uid = req.query.uid as string;
   const tweets = await prisma.tweet.findMany({
     where: {
       authorId: uid,

@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({ log: ["query"] });
 
 const getUserById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const uid = parseInt(req.query.uid as string);
-  const userId = parseInt(req.query.userId as string);
+  const uid = req.query.uid as string;
+  const userId = req.query.userId as string;
   console.log(uid, userId);
 
   const user = await prisma.user.findUnique({
@@ -26,16 +26,21 @@ const getUserById = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     },
   });
-  const follows = await prisma.follows.findFirst({
-    where: {
-      followerId: userId,
-      followingId: uid,
-    },
+  const follows = await prisma.user.findFirst({
+    where: { id: uid },
     select: {
-      followerId: true,
+      followedBy: {
+        select: {
+          id: true,
+        },
+        where: {
+          id: userId,
+        },
+      },
     },
   });
-  const isFollow = follows ? true : false;
+  const isFollow =
+    follows?.followedBy.length && follows.followedBy.length > 0 ? true : false;
   // @ts-ignore
   user.isFollowed = isFollow;
   res.status(200).json(user);

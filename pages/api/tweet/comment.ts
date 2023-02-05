@@ -4,8 +4,8 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 const addComment = async (req: NextApiRequest, res: NextApiResponse) => {
   var { tweetId, userId, content, image } = req.body;
-  tweetId = parseInt(tweetId as string);
-  userId = parseInt(userId as string);
+  tweetId = tweetId as string;
+  userId = userId as string;
   console.log(tweetId, userId, content, image);
 
   const comment = await prisma.comment.create({
@@ -21,8 +21,8 @@ const addComment = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const getComments = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, userId } = req.query;
-  const tweetId = parseInt(id as string);
-  const uid = parseInt(userId as string);
+  const tweetId = id as string;
+  const uid = userId as string;
   const comments = await prisma.comment.findMany({
     where: {
       tweetId: tweetId,

@@ -16,7 +16,7 @@ const Feed = (props: Props) => {
 
   const fetchTweets = async () => {
     // @ts-ignore
-    const res = await fetch(`/api/tweet?userId=${session?.user?.id ?? ""}}`);
+    const res = await fetch(`/api/tweet?userId=${session?.user?.id ?? ""}`);
     const newTweets = await res.json();
     setTweets(newTweets);
     console.log("newTweets", newTweets);

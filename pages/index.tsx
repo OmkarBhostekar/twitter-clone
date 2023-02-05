@@ -41,7 +41,7 @@ const Home = (props: Props) => {
         <title>Twitter clone</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen flex flex-grow max-w-2xl">
+      <main className="min-h-screen flex flex-grow">
         <Sidebar />
         <Feed />
 

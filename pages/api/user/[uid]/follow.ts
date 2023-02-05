@@ -3,36 +3,57 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({ log: ["query"] });
 
 const toggleFollow = async (req: NextApiRequest, res: NextApiResponse) => {
-  const uid = parseInt(req.query.uid as string);
-  const userId = parseInt(req.body.userId as string);
-  const isFollow = req.body.isFollow as boolean;
+  try {
+    const uid = req.query.uid as string;
+    const userId = req.body.userId as string;
+    const isFollow = req.body.isFollow as boolean;
 
-  const follow = await prisma.follows.findFirst({
-    where: {
-      followerId: userId,
-      followingId: uid,
-    },
-  });
-  if (follow) {
-    if (!isFollow) {
-      await prisma.follows.deleteMany({
-        where: {
-          followerId: userId,
-          followingId: uid,
+    const x = await prisma.user.findFirst({
+      where: { id: uid },
+      select: {
+        followedBy: {
+          select: {
+            id: true,
+          },
+          where: {
+            id: userId,
+          },
         },
-      });
+      },
+    });
+    const follow =
+      x?.followedBy.length && x.followedBy.length > 0 ? true : false;
+    if (follow) {
+      if (!isFollow) {
+        await prisma.user.update({
+          where: { id: uid },
+          data: {
+            followedBy: {
+              delete: {
+                id: userId,
+              },
+            },
+          },
+        });
+      }
+    } else {
+      if (isFollow) {
+        await prisma.user.update({
+          where: { id: uid },
+          data: {
+            followedBy: {
+              connect: {
+                id: userId,
+              },
+            },
+          },
+        });
+      }
     }
-  } else {
-    if (isFollow) {
-      await prisma.follows.create({
-        data: {
-          followerId: userId,
-          followingId: uid,
-        },
-      });
-    }
+    res.status(200).json({ message: "success" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
   }
-  res.status(200).json({ message: "success" });
 };
 
 export default async function handler(
